@@ -1981,7 +1981,7 @@ SUB loadfoe (byval slot as integer, formdata as Formation, byref bat as BattleSt
     .stat.cur.sta(i) = .enemy.stat.sta(i)
     .stat.max.sta(i) = .enemy.stat.sta(i)
    NEXT i
-
+  .ready_meter = 0 
   END WITH
  END IF
 END SUB
