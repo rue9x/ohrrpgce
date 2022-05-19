@@ -1413,6 +1413,7 @@ SUB battle_crappy_run_handler(byref bat as BattleState, bslot() as BattleSprite)
    FOR i = 0 TO 3
     bslot(i).ready_meter = 0
     bslot(i).ready = NO
+   
    NEXT i
   END IF
  END IF
@@ -3239,13 +3240,21 @@ SUB dead_enemy(byval deadguy as integer, byval killing_attack as integer, byref 
  'NOTE: dissolve/flee animation will be ongoing.
  'killing_attack is the id of the attack that killed the target or -1 if the target died without a specific attack
  DIM enemynum as integer = deadguy - 4
+ 
+ '-- Reset turn timer for slot.
+ bslot(deadguy).ready_meter = 0
+ bslot(deadguy).ready = NO
+ bslot(deadguy).no_attack_this_turn = YES
+ 
  '--spawn enemies before freeing the formdata slot to avoid infinite loops. however this might need to be changed to fix morphing enemies?
- spawn_on_death deadguy, killing_attack, bat, formdata, bslot()
+  spawn_on_death deadguy, killing_attack, bat, formdata, bslot()
 
+ '-- Give rewards for dead enemy
  enemy_death_rewards bat, bslot(deadguy)
 
  ' remove dead enemy from formation
  formdata.slots(enemynum).id = -1
+    
 END SUB
 
 SUB enemy_death_rewards(byref bat as BattleState, battler as BattleSprite)
